@@ -24,6 +24,9 @@ namespace HubSpot.NET.Core
         public string AppId { get; private set; }
         private HubSpotToken _token;
 
+        // Used for Private Apps
+        private string _accessToken;
+
         /// <summary>
         /// Creates a HubSpot client with the specified authentication scheme (Default: HAPIKEY). 
         /// </summary>
@@ -36,6 +39,12 @@ namespace HubSpot.NET.Core
             _mode = mode;
             _token = token;
             AppId = appId;
+        }
+
+        public HubSpotBaseClient(string accessToken, HubSpotAuthenticationMode mode)
+        {
+            _mode = mode;
+            _accessToken = accessToken;
         }
 
         public T Execute<T>(string path, Method method = Method.GET) where T : new() 
@@ -174,6 +183,9 @@ namespace HubSpot.NET.Core
                 case HubSpotAuthenticationMode.OAUTH:
                     request.AddHeader("Authorization", GetAuthHeader(_token));
                     break;
+                case HubSpotAuthenticationMode.HEADER:
+                    request.AddHeader("Authorization", "Bearer " + _accessToken);
+                    break;
                 default:
                     request.AddQueryParameter(_apiKeyName, _apiKey);
                     break;
@@ -190,6 +202,6 @@ namespace HubSpot.NET.Core
      
     public enum HubSpotAuthenticationMode
     {
-        HAPIKEY, OAUTH
+        HAPIKEY, OAUTH, HEADER
     }
 }
