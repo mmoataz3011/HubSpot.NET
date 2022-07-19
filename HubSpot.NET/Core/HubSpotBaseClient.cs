@@ -41,10 +41,11 @@ namespace HubSpot.NET.Core
             AppId = appId;
         }
 
-        public HubSpotBaseClient(string accessToken, HubSpotAuthenticationMode mode)
+        public HubSpotBaseClient(HubSpotAuthenticationMode mode, string accessToken)
         {
-            _mode = mode;
             _accessToken = accessToken;
+            _client = new RestClient(_baseUrl);
+            _mode = mode;
         }
 
         public T Execute<T>(string path, Method method = Method.GET) where T : new() 

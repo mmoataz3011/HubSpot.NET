@@ -58,6 +58,12 @@
             InitializeRepos(client, clientId, clientSecret);
         }
 
+        public HubSpotApi(HubSpotAuthenticationMode mode, string accessToken)
+        {
+            IHubSpotClient client = new HubSpotBaseClient(mode, accessToken);
+            InitializeRepos(client);
+        }
+
         private void InitializeRepos(IHubSpotClient client, string clientId = "", string clientSecret = "")
         {
             OAuth = new HubSpotOAuthApi(client, clientId, clientSecret);
